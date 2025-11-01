@@ -1,10 +1,10 @@
-name: Deploy to Azure App Service (daily + push)
+name: Deploy to Azure App Service (static site)
 
 on:
   push:
     branches: ["main", "master"]
   schedule:
-    - cron: "0 0 * * *"   # daily (UTC) -> 台灣早上 08:00
+    - cron: "0 0 * * *"   # daily (UTC) -> 台灣 08:00
   workflow_dispatch:
 
 jobs:
@@ -15,20 +15,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 可留，可拿掉：讓頁面顯示這次部署時間
+      # （可選）要在前端顯示最後部署時間就留這段
       - name: Write build time file
         run: |
           echo "last_build=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" > site/build.txt
 
-      # 因為你的靜態網頁放在 site/，這裡自動壓成 zip 給 App Service
+      # 把 /site 壓一包給 App Service
       - name: Archive static site
         run: |
           cd site
           zip -r ../site.zip .
 
+      # 真正部署
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: static-web-auto-deploy # ← 改成你 portal 建的 App Service 名稱
+          app-name: "YOUR_APP_SERVICE_NAME"     # ← 換成你的 App Service 名稱
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: site.zip
