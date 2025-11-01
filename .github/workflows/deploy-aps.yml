@@ -29,6 +29,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "YOUR_APP_SERVICE_NAME"                # ← 改成你 portal 建的 App Service 名稱
+          app-name: static-web-auto-deploy # ← 改成你 portal 建的 App Service 名稱
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: site.zip
