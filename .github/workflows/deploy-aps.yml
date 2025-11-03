@@ -18,7 +18,7 @@ jobs:
       # （可選）要在前端顯示最後部署時間就留這段
       - name: Write build time file
         run: |
-          echo "last_build=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" > site/build.txt
+          echo "Last build: $(TZ='Asia/Taipei' date +'%Y-%m-%d %H:%M:%S GMT+8')" > site/build.txt
 
       # 把 /site 壓一包給 App Service
       - name: Archive static site
